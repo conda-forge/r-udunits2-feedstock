@@ -1,7 +1,8 @@
 #!/bin/bash
-
-export UDUNITS2_INCLUDE=${PREFIX}/include
-export UDUNITS2_LIB=${PREFIX}/lib
-export DYLD_FALLBACK_LIBRARY_PATH=${PREFIX}/lib
-
-$R CMD INSTALL --build --configure-args="--with-udunits2-lib=${PREFIX}/lib --with-udunits2-include=${PREFIX}/include" .
+if [[ $target_platform =~ linux.* ]] || [[ $target_platform == win-32 ]] || [[ $target_platform == win-64 ]] || [[ $target_platform == osx-64 ]]; then
+  export DISABLE_AUTOBREW=1
+  $R CMD INSTALL --build .
+else
+  mkdir -p $PREFIX/lib/R/library/udunits2
+  mv * $PREFIX/lib/R/library/udunits2
+fi
