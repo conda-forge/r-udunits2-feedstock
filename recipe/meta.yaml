@@ -1,5 +1,4 @@
 {% set version = '0.13' %}
-
 {% set posix = 'm2-' if win else '' %}
 {% set native = 'm2w64-' if win else '' %}
 
@@ -10,34 +9,43 @@ package:
 source:
   fn: udunits2_{{ version }}.tar.gz
   url:
-    - https://cran.r-project.org/src/contrib/udunits2_{{ version }}.tar.gz
-    - https://cran.r-project.org/src/contrib/Archive/udunits2/udunits2_{{ version }}.tar.gz
+    - {{ cran_mirror }}/src/contrib/udunits2_{{ version }}.tar.gz
+    - {{ cran_mirror }}/src/contrib/Archive/udunits2/udunits2_{{ version }}.tar.gz
   sha256: d155d3c07f6202b65dec4075ffd1e1c3f4f35f5fdece8cfb319d39256a3e5b79
 
 build:
-  number: 0
-  skip: true  # [win]
-
+  merge_build_host: True  # [win]
+  number: 1
+  skip: true  # [win32]
   rpaths:
     - lib/R/lib/
     - lib/
 
 requirements:
   build:
+    - {{ compiler('c') }}        # [not win]
+    - {{native}}toolchain        # [win]
+    - {{posix}}filesystem        # [win]
+    - {{posix}}sed               # [win]
+    - {{posix}}grep              # [win]
+    - {{posix}}autoconf
+    - {{posix}}automake-wrapper  # [win]
+    - {{posix}}automake          # [not win]
+    - {{posix}}pkg-config
+    - {{posix}}make
+    - {{posix}}sed  # [win]
+    - {{posix}}coreutils  # [win]
+  host:
     - r-base
-    - posix                # [win]
-    - {{native}}toolchain  # [win]
-    - gcc                  # [not win]
     - udunits2
-
   run:
     - r-base
-    - libgcc  # [not win]
+    - {{native}}gcc-libs         # [win]
     - udunits2
 
 test:
   commands:
-    - $R -e "library('udunits2')"  # [not win]
+    - $R -e "library('udunits2')"           # [not win]
     - "\"%R%\" -e \"library('udunits2')\""  # [win]
 
 about:
@@ -45,8 +53,13 @@ about:
   license: GPL-2
   summary: Provides simple bindings to Unidata's udunits library.
   license_family: GPL2
+  license_file: '{{ environ["PREFIX"] }}/lib/R/share/licenses/GPL-2'  # [unix]
+  license_file: '{{ environ["PREFIX"] }}\R\share\licenses\GPL-2'  # [win]
 
 extra:
   recipe-maintainers:
     - johanneskoester
     - bgruening
+    - daler
+    - jdblischak
+    - cbrueffer
