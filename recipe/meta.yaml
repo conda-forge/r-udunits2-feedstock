@@ -15,7 +15,7 @@ source:
 
 build:
   merge_build_host: True  # [win]
-  number: 2
+  number: 1002
   skip: true  # [win32]
   rpaths:
     - lib/R/lib/
@@ -53,8 +53,7 @@ about:
   license: GPL-2
   summary: Provides simple bindings to Unidata's udunits library.
   license_family: GPL2
-  license_file: '{{ environ["PREFIX"] }}/lib/R/share/licenses/GPL-2'  # [unix]
-  license_file: '{{ environ["PREFIX"] }}\R\share\licenses\GPL-2'  # [win]
+  license_file: '{{ environ["PREFIX"] }}/lib/R/share/licenses/GPL-2'
 
 extra:
   recipe-maintainers:
