@@ -1,4 +1,4 @@
-{% set version = "0.13.1" %}
+{% set version = "0.13.2" %}
 {% set posix = 'm2-' if win else '' %}
 {% set native = 'm2w64-' if win else '' %}
 
@@ -11,7 +11,7 @@ source:
   url:
     - {{ cran_mirror }}/src/contrib/udunits2_{{ version }}.tar.gz
     - {{ cran_mirror }}/src/contrib/Archive/udunits2/udunits2_{{ version }}.tar.gz
-  sha256: 1c2144d16ce8ee9b1f11d6fa9235460f69689a30941aed3a530a231f914b08d1
+  sha256: ee00898801b3282717cba40a9ef930515506386aa82a050356d1a9c80a9f5969
 
 build:
   merge_build_host: true  # [win]
