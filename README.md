@@ -7,20 +7,24 @@ Feedstock license: [BSD-3-Clause](https://github.com/conda-forge/r-udunits2-feed
 About r-udunits2
 ----------------
 
-Home: https://github.com/pacificclimate/Rudunits2 https://www.unidata.ucar.edu/software/udunits/
+Home: https://www.unidata.ucar.edu/software/udunits/
 
-Package license: GPL-2
+Package license: GPL-2.0-only
 
 Summary: Provides simple bindings to Unidata's udunits library.
+
+Development: https://github.com/pacificclimate/Rudunits2
 
 About r-udunits2
 ----------------
 
-Home: https://github.com/pacificclimate/Rudunits2 https://www.unidata.ucar.edu/software/udunits/
+Home: https://www.unidata.ucar.edu/software/udunits/
 
-Package license: GPL-2
+Package license: GPL-2.0-only
 
 Summary: Provides simple bindings to Unidata's udunits library.
+
+Development: https://github.com/pacificclimate/Rudunits2
 
 Current build status
 ====================
