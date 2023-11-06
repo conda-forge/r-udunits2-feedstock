@@ -15,17 +15,16 @@ source:
 
 build:
   merge_build_host: true  # [win]
-  number: 2
-  skip: true  # [win32]
+  number: 3
   rpaths:
     - lib/R/lib/
     - lib/
 
 requirements:
   build:
-    - cross-r-base {{ r_base }}  # [build_platform != target_platform]
-    - {{ compiler('c') }}        # [not win]
-    - {{ compiler('m2w64_c') }}        # [win]
+    - cross-r-base {{ r_base }}    # [build_platform != target_platform]
+    - {{ compiler('c') }}          # [not win]
+    - {{ compiler('m2w64_c') }}    # [win]
     - {{ posix }}filesystem        # [win]
     - {{ posix }}sed               # [win]
     - {{ posix }}grep              # [win]
@@ -42,7 +41,6 @@ requirements:
   run:
     - r-base
     - {{ native }}gcc-libs         # [win]
-    - udunits2
 
 test:
   commands:
@@ -50,8 +48,9 @@ test:
     - "\"%R%\" -e \"library('udunits2')\""  # [win]
 
 about:
-  home: https://github.com/pacificclimate/Rudunits2 https://www.unidata.ucar.edu/software/udunits/
-  license: GPL-2
+  home: https://www.unidata.ucar.edu/software/udunits/
+  dev_url: https://github.com/pacificclimate/Rudunits2
+  license: GPL-2.0-only
   summary: Provides simple bindings to Unidata's udunits library.
   license_family: GPL2
   license_file: {{ environ["PREFIX"] }}/lib/R/share/licenses/GPL-2
