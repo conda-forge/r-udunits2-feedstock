@@ -6,11 +6,12 @@ package:
   version: {{ version|replace("-", "_") }}
 
 source:
-  fn: udunits2_{{ version }}.tar.gz
   url:
     - {{ cran_mirror }}/src/contrib/udunits2_{{ version }}.tar.gz
     - {{ cran_mirror }}/src/contrib/Archive/udunits2/udunits2_{{ version }}.tar.gz
   sha256: 9f5429c04a24930f7d037d506e5b154b6154df69247dcdaa6261075291d7f902
+  patches:
+    - patches/0001-minimal-ucrt-libs.patch
 
 build:
   number: 4
