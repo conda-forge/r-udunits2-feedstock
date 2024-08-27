@@ -1,0 +1,30 @@
+From 264c3e3c00f0e3cf78d51e137fafb97512b363c4 Mon Sep 17 00:00:00 2001
+From: Mervin Fansler <mervin.fansler@bric.ku.dk>
+Date: Tue, 27 Aug 2024 09:22:58 +0200
+Subject: [PATCH] minimal ucrt libs
+
+---
+ src/Makevars.ucrt | 16 ++--------------
+ 1 file changed, 2 insertions(+), 14 deletions(-)
+
+diff --git a/src/Makevars.ucrt b/src/Makevars.ucrt
+index be127cd..844a191 100644
+--- a/src/Makevars.ucrt
++++ b/src/Makevars.ucrt
+@@ -1,14 +1,2 @@
+-PKG_LIBS = -ludunits2 -lexpat
+-
+-all: clean winlibs
+-
+-winlibs:
+-	mkdir -p ../inst
+-	rm -Rf ../inst/share
+-	mkdir -p ../inst/share/udunits
+-	cp -r $(R_TOOLS_SOFT)/share/udunits/* ../inst/share/udunits
+-
+-clean:
+-	rm -Rf $(SHLIB) $(OBJECTS)
+-
+-.PHONY: all winlibs clean
++PKG_LIBS = -L$(LIBRARY_LIB) -ludunits2 -lexpat
++PKG_CPPFLAGS = -I$(LIBRARY_INC)
