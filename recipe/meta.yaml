@@ -39,7 +39,7 @@ requirements:
   host:
     - r-base
     - udunits2
-    - libexpat
+    - expat
   run:
     - r-base
 
