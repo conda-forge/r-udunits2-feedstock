@@ -1,17 +1,17 @@
-From 4e84b336e5a53030b6a80702dc296c082a14d7b0 Mon Sep 17 00:00:00 2001
+From 6b193c106007630f8ff0952d15bc1d4b1ca76a43 Mon Sep 17 00:00:00 2001
 From: Daniel Nachun <daniel.nachun@gmail.com>
 Date: Fri, 3 Jan 2025 13:30:18 -0600
 Subject: [PATCH] minimal ucrt libs
 
 ---
- src/Makevars.ucrt | 14 --------------
- 1 file changed, 14 deletions(-)
+ src/Makevars.ucrt | 15 +--------------
+ 1 file changed, 1 insertion(+), 14 deletions(-)
 
 diff --git a/src/Makevars.ucrt b/src/Makevars.ucrt
-index be127cd..e69de29 100644
+index be127cd..2004f69 100644
 --- a/src/Makevars.ucrt
 +++ b/src/Makevars.ucrt
-@@ -1,14 +0,0 @@
+@@ -1,14 +1 @@
 -PKG_LIBS = -ludunits2 -lexpat
 -
 -all: clean winlibs
@@ -26,6 +26,7 @@ index be127cd..e69de29 100644
 -	rm -Rf $(SHLIB) $(OBJECTS)
 -
 -.PHONY: all winlibs clean
++PKG_LIBS=-ludunits2 -lexpat
 -- 
 2.47.1
 
