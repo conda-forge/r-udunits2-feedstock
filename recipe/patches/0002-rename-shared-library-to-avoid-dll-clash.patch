@@ -1,0 +1,79 @@
+From 81a93bf09484cd3afaf31e3ce80a4bb90441e0c4 Mon Sep 17 00:00:00 2001
+From: Daniel Nachun <daniel.nachun@gmail.com>
+Date: Tue, 18 Aug 2026 01:00:26 -0700
+Subject: [PATCH] rename package shared library to Rudunits2 to avoid
+ udunits2.dll clash on Windows
+
+On Windows the conda-forge 'libudunits2' package ships its runtime library as
+udunits2.dll.  R installs this package's own compiled library as udunits2.dll
+too, and loads it with useDynLib(udunits2, ...).  When the loader then resolves
+this DLL's import of libudunits2's udunits2.dll, it matches the already-loaded
+module of the same base name (this package's own DLL) instead of libudunits2, so
+the udunits2 symbols are not found and loading the namespace fails.
+
+Install the package library as Rudunits2.<ext> instead (via src/install.libs.R),
+and rename the registration entry point to R_init_Rudunits2 and the useDynLib
+directive to match, so the base name no longer collides with libudunits2 while
+the package keeps linking against the external shared udunits2 library.
+---
+ NAMESPACE          |  2 +-
+ src/init.c         |  2 +-
+ src/install.libs.R | 25 +++++++++++++++++++++++++
+ 3 files changed, 27 insertions(+), 2 deletions(-)
+ create mode 100644 src/install.libs.R
+
+diff --git a/NAMESPACE b/NAMESPACE
+index 0c084f7..67204c8 100644
+--- a/NAMESPACE
++++ b/NAMESPACE
+@@ -1,2 +1,2 @@
+ exportPattern("^ud.*")
+-useDynLib(udunits2, R_ut_are_convertible, R_ut_convert, R_ut_get_name, R_ut_get_symbol, R_ut_is_parseable, R_ut_set_encoding, R_ut_init)
++useDynLib(Rudunits2, R_ut_are_convertible, R_ut_convert, R_ut_get_name, R_ut_get_symbol, R_ut_is_parseable, R_ut_set_encoding, R_ut_init)
+diff --git a/src/init.c b/src/init.c
+index 7274202..0495e81 100644
+--- a/src/init.c
++++ b/src/init.c
+@@ -23,7 +23,7 @@ static const R_CMethodDef CEntries[] = {
+     {NULL, NULL, 0}
+ };
+ 
+-void R_init_udunits2(DllInfo *dll)
++void R_init_Rudunits2(DllInfo *dll)
+ {
+     R_registerRoutines(dll, CEntries, NULL, NULL, NULL);
+     R_useDynamicSymbols(dll, FALSE);
+diff --git a/src/install.libs.R b/src/install.libs.R
+new file mode 100644
+index 0000000..08ae879
+--- /dev/null
++++ b/src/install.libs.R
+@@ -0,0 +1,25 @@
++# Install the compiled package library under the name "Rudunits2" instead of
++# "udunits2".  On Windows the udunits2 library is shipped as "udunits2.dll", so a
++# package library also called "udunits2.dll" collides with it at load time: the
++# loader resolves this package's dependency on libudunits2's "udunits2.dll" to the
++# already-loaded package DLL of the same base name, and symbol resolution fails.
++# Renaming our own library avoids the clash.  The matching name is used by
++# `useDynLib(Rudunits2, ...)` and `R_init_Rudunits2()`.
++#
++# This mirrors the default logic in tools:::.install_packages() (glob the built
++# shared objects and copy them into libs[/arch]), only renaming the main one.
++
++files <- Sys.glob(paste0("*", SHLIB_EXT))
++
++dest <- file.path(R_PACKAGE_DIR, paste0("libs", R_ARCH))
++dir.create(dest, recursive = TRUE, showWarnings = FALSE)
++
++main <- paste0(R_PACKAGE_NAME, SHLIB_EXT)          # e.g. udunits2.dll / udunits2.so
++for (f in files) {
++  target <- if (identical(f, main)) paste0("R", main) else f
++  file.copy(f, file.path(dest, target), overwrite = TRUE)
++}
++
++if (file.exists("symbols.rds")) {
++  file.copy("symbols.rds", dest, overwrite = TRUE)
++}
+-- 
+2.53.0
+
